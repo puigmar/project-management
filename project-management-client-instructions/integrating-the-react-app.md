@@ -1,7 +1,7 @@
 Comencemos creando la aplicación React usando el comando CLI:
 
 ```
-$ create-react-app project-management-client
+$ npx create-react-app project-management-client
 ```
 
 Ya hemos actualizado el puerto donde se está ejecutando nuestro servidor; Lo cambiamos de 3000 a 4000, por lo que no necesitamos realizar ningún cambio en nuestro cliente. Resumiendo:
