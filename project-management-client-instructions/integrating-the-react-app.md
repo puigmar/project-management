@@ -11,7 +11,7 @@ Ya hemos actualizado el puerto donde se está ejecutando nuestro servidor; Lo ca
 
 Para ejecutar nuestro servidor usamos npm run dev y para iniciar nuestro cliente, usamos npm start.
 
-Basic Structure
+### Basic Structure
 
 Todavía no profundizaremos en las rutas, pero por ahora crearemos dos componentes, para crear un proyecto y mostrarlo, y vamos desde allí.
 
@@ -45,7 +45,7 @@ src
 
 Comenzaremos construyendo el componente `<AddProject />`. Este componente mostrará el formulario y se encargará de su envío. Al manejar el envío del formulario, nos referimos al uso de axios para llegar a una ruta back-end y entregar algunos datos enviados desde el frontend (o simplemente podemos decir que los envió el usuario después de completar el formulario y enviarlo). Así que hagamos esto:
 
-```js
+```jsx
 // components/projects/AddProject.js
 
 import React, { Component } from "react";
@@ -108,7 +108,7 @@ export default AddProject;
 La mayor parte del código parece muy familiar, ¿verdad? Porque ya cubrimos los conceptos básicos del uso de formularios en React.
 Importemos el componente `<AddProject />` a App.js y lo renderizaremos allí por ahora.
 
-```js
+```jsx
 // App.js
 import React, { Component } from "react";
 import "./App.css";
@@ -132,7 +132,7 @@ checkpoint
 Ahora puede ir a http://localhost:3000 y verá un formulario allí. Asegúrese de que su servidor se esté ejecutando e intente agregar un nuevo proyecto. Verifique su base de datos y debería ver un nuevo project en la projects collection.
 Entonces, cuando tenemos al menos un project en nuestra base de datos, procedamos a crear el componente `<ProjectList />`. Dentro de este componente usaremos axios para obtener todos los projects del backend.
 
-```js
+```jsx
 // components/projects/ProjectList.js
 
 import React, { Component } from "react";
@@ -193,9 +193,9 @@ Veamos qué es interesante aquí:
 - vemos que el componente `<AddProject />` estará realmente anidado dentro de `<ProjectList />`, así que vamos y elimínelo de App.js y también dejemos de comentar this.props.getData() dentro de `<AddProject />`;
 - comentamos la línea de project description ya que construiremos la página de detalles, la descripción será visible allí.
 
-Antes de ir a http://localhost:3000 y ver la lista de proyectos, primero tenemos que configurar el Router. Si recuerdas, comenzamos el proceso configurando el núcleo de nuestra aplicación, index.js, donde representamos el componente madre <App />.
+Antes de ir a http://localhost:3000 y ver la lista de proyectos, primero tenemos que configurar el Router. Si recuerdas, comenzamos el proceso configurando el núcleo de nuestra aplicación, index.js, donde representamos el componente madre ```<App />```.
 
-```js
+```jsx
 // index.js
 
 import React from "react";
@@ -218,7 +218,7 @@ Después de importar BrowserRouter, lo usamos envolviendo la etiqueta `<App />`.
 
 En este momento, nuestro App.js se ve así:
 
-```js
+```jsx
 // App.js
 
 import React, { Component } from "react";
@@ -238,9 +238,9 @@ class App extends Component {
 export default App;
 ```
 
-Agreguemos otro archivo en la carpeta de components/projects, un ProjectDetails.js y agreguemos solo estas dos líneas de código por ahora:
+Agreguemos otro archivo en la carpeta de components/projects, un ProjectDetails.js y agreguemos solo estas líneas de código por ahora:
 
-```js
+```jsx
 // components/projects/ProjectDetails.js
 
 import React, { Component } from 'react';
@@ -278,7 +278,7 @@ src
 
 Nuestro Navbar.js tendrá algunos enlaces en el futuro, pero en este momento solo uno en realidad:
 
-```js
+```jsx
 // components/navbar/Navbar.js
 
 import React from "react";
@@ -303,7 +303,7 @@ export default navbar;
 
 Ahora hemos configurado todo para poder ir a App.js para configurar algunas rutas allí:
 
-```js
+```jsx
 // App.js
 
 import React, { Component } from "react";
@@ -335,7 +335,7 @@ export default App;
 
 Por ahora podemos: crear un nuevo proyecto, mostrar todos los proyectos y al hacer click en el título del proyecto, se nos redirige a la página de detalles del project que por el momento no tiene mucho código. ¡Agreguemos un poco más!
 
-```js
+```jsx
 // components/projects/ProjectDetails.js
 
 import React, { Component } from "react";
@@ -385,7 +385,7 @@ Más o menos directo: componentDidMount() está ejecutando el método getSingleP
 
 El próximo desafío es mostrar el formulario de edición y actualizar el proyecto. En primer lugar, crearemos un nuevo archivo dentro de la carpeta de components/projects: EditProject.js. Este componente tendrá el formulario que hará que onSubmit haga cambios en un project específico.
 
-```js
+```jsx
 // components/projects/EditProject.js
 
 import React, { Component } from "react";
@@ -464,11 +464,11 @@ export default EditProject;
 En este punto, estamos muy familiarizados con los formularios: ya que construimos con éxito el componente `<AddProject />`. Como puede ver, este componente depende en gran medida de las props que se pasan a este componente y veremos justo ahora dónde y por qué.
 Entonces, veamos ahora, dónde debemos renderizar este componente. Podemos hacer eso aquí dentro del componente `<ProjectDetails />`. Realmente es cuestión de su preferencia: si lo desea, también puede hacer que el formulario se muestre en una página separada. Procederemos a configurar la funcionalidad de edit/update dentro del details component.
 
-```js
+```jsx
 // components/projects/ProjectDetails.js
 ...
 
-import EditProject from './EditProject';
+import EditProject from './EditProject'; // <<<< this line
 
 class ProjectDetails extends Component {
 
@@ -488,7 +488,7 @@ class ProjectDetails extends Component {
       <div>
         <h1>{this.state.title}</h1>
         <p>{this.state.description}</p>
-        <div>{this.renderEditForm()} </div> {/* !!! */}
+        <div>{this.renderEditForm()} </div> {/* <<<< this line */}
         <Link to={'/projects'}>Back to projects</Link>
       </div>
     )
@@ -497,14 +497,14 @@ class ProjectDetails extends Component {
 export default ProjectDetails;
 ```
 
-Se llama al método renderEditForm() dentro del método render() y lo que hace es básicamente esto: comprueba si this.state tiene alguna propiedad (elegimos el título), y si eso es cierto, invoca el método getSingleProject() que obtiene el objeto project de nuestra API y lo establece en el estado del componente. En la próxima ejecución de renderEditForm(), está renderizando el componente `<EditProject />` con props pasados ​​a sí mismo. Aquí podemos ver que lo que se está pasando es theProject, que es realmente EL project que estamos viendo en esta página de detalles y estamos pasando el método getSingleProject() como props getTheProject. Ahora, si miras hacia atrás a nuestro componente `<EditProject />`, todo tiene más sentido, ¿verdad?
+Se llama al método renderEditForm() dentro del método render() y lo que hace es básicamente esto: comprueba si this.state tiene alguna propiedad (elegimos el título), y si eso no es cierto, invoca el método getSingleProject() que obtiene el objeto project de nuestra API y lo establece en el estado del componente. En la próxima ejecución de renderEditForm(), está renderizando el componente `<EditProject />` con props pasados ​​a sí mismo. Aquí podemos ver que lo que se está pasando es theProject, que es realmente EL project que estamos viendo en esta página de detalles y estamos pasando el método getSingleProject() como props getTheProject. Ahora, si miras hacia atrás a nuestro componente `<EditProject />`, todo tiene más sentido, ¿verdad?
 
 Estamos casi al final de la primera parte de nuestra aplicación. Solo agreguemos la funcionalidad de eliminación para que podamos tener CRUD completo.
 
-Dentro del componente `<ProjectDetails />`, agregaremos el método deleteProject() que hará llamadas axios al backend y eliminará la ruta, y tendremos un botón que activará la ejecución de este método.
+Dentro del componente `<ProjectDetails />`, agregaremos el método deleteProject() que hará llamadas axios al backend y eliminará el proyecto, y tendremos un botón que activará la ejecución de este método.
 Nuestro componente `<ProjectDetails />` completo al final se ve así:
 
-```js
+```jsx
 // components/projects/ProjectDetails.js
 
 import React, { Component } from 'react';
@@ -554,7 +554,7 @@ class ProjectDetails extends Component {
     const { params } = this.props.match;
     axios.delete(`http://localhost:4000/api/projects/${params.id}`)
     .then( () =>{
-        this.props.history.push('/projects'); {/* !!! */}
+        this.props.history.push('/projects'); {/* <<<< this line */}
 
     })
     .catch((err)=>{
@@ -568,7 +568,7 @@ class ProjectDetails extends Component {
         <h1>{this.state.title}</h1>
         <p>{this.state.description}</p>
         <div>{this.renderEditForm()} </div>
-        <button onClick={() => this.deleteProject()}>Delete project</button> {/* <== !!! */}
+        <button onClick={() => this.deleteProject()}>Delete project</button> {/* <<<< this line */}
         <br/>
         <Link to={'/projects'}>Back to projects</Link>
       </div>
@@ -582,7 +582,7 @@ export default ProjectDetails;
 Projects done!!! CRUD completo funciona, así que pasemos a la parte de tasks. En la mayoría de los casos, tendremos la situación de tener que anidar componentes uno dentro del otro. Así que hagámoslo: nuestras tasks pertenecen a projects, por lo que tendremos que anidarlas dentro del componente project.
 Para comenzar a trabajar en esta parte de la aplicación, creemos primero la carpeta de components/tasks y nuestro primer componente relacionado con la tarea: AddTask.js y agreguemos el siguiente código:
 
-```js
+```jsx
 // components/tasks/AddTask.js
 
 import React, { Component } from 'react';
@@ -658,7 +658,7 @@ export default AddTask;
 
 Ahora, cuando creamos el componente AddTask, tenemos que ponerlo en algún lugar de nuestra aplicación para que el usuario pueda verlo. Hagámoslo en la página de detalles del project.
 
-```js
+```jsx
 // components/projects/ProjectDetails.js
 
 ...
@@ -693,7 +693,7 @@ class ProjectDetails extends Component {
             return(
                 <div key={ index }>
                 {/* ... make each task's title a link that goes to the task details page */}
-                    <Link to={`/projects/${this.state._id}/tasks/${task._id}`}>
+                    <Link to={`/tasks/${task._id}`}>
                         { task.title }
                     </Link>
                 </div>
@@ -701,12 +701,13 @@ class ProjectDetails extends Component {
 
         }) }
         <div>{this.renderEditForm()} </div>
-        <button onClick={() => this.deleteProject()}>Delete project</button> {/*<== !!! */}
+        <button onClick={() => this.deleteProject()}>Delete project</button> 
         <br/>
-        <div>{this.renderAddTaskForm()}
-</div>
+        <div> {/*<== !!! */}
+            {this.renderAddTaskForm()} 
+		</div>
 
-<br/><br/><br/><br/><br/>
+		<br/><br/><br/><br/><br/>
 
         <Link to={'/projects'}>Back to projects</Link>
       </div>
@@ -719,7 +720,7 @@ export default ProjectDetails;
 
 Además, enumeremos las tasks debajo del título de cada project en la página principal /projects también. El usuario no puede hacer click en ellos, esa funcionalidad ya se encuentra en la página de detalles del proyecto.
 
-```js
+```jsx
 // components/projects/ProjectList.js
 ...
 
@@ -760,7 +761,7 @@ export default ProjectList;
 
 Terminaremos la lección mostrando la página de task details, así que creemos el archivo components/tasks/TaskDetails.js y agreguemos el siguiente fragmento de código:
 
-```js
+```jsx
 // components/tasks/TaskDetails.js
 
 import React, { Component } from 'react';
@@ -780,7 +781,7 @@ class TaskDetails extends Component {
   getTheTask = () => {
     const { params } = this.props.match;
 
-axios.get(`http://localhost:4000/api/projects/${params.id}/tasks/${params.taskId}`)
+axios.get(`http://localhost:4000/api/tasks/${params.taskId}`)
 
     .then( responseFromApi =>{
       const theTask = responseFromApi.data;
@@ -808,9 +809,9 @@ axios.get(`http://localhost:4000/api/projects/${params.id}/tasks/${params.taskId
 export default TaskDetails;
 ```
 
-Y ahora tenemos que "decirle" a nuestra app cuándo representar este componente, así que abramos App.js, importemos el componente TaskDetails y agreguemos la siguiente ruta entre la etiqueta <Switch> como la tercera ruta:
+Y ahora tenemos que "decirle" a nuestra app cuándo representar este componente, así que abramos App.js, importemos el componente TaskDetails y agreguemos la siguiente ruta entre la etiqueta ```<Switch>``` como la tercera ruta:
 
-```js
+```jsx
 // App.js
 
 ...
@@ -827,7 +828,7 @@ class App extends Component {
           <Route exact path="/projects" component={ProjectList}/>
           <Route exact path="/projects/:id" component={ProjectDetails} />
           {/* added to display task details page: */}
-          <Route exact path="/projects/:id/tasks/:taskId" component={TaskDetails} /> {/* <== !!! */}
+          <Route exact path="/tasks/:taskId" component={TaskDetails} /> {/* <== !!! */}
         </Switch>
       </div>
     );

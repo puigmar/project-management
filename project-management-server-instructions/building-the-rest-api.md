@@ -1,12 +1,12 @@
-Setup
+## Setup
 
 Dependencies
 
-Como clonamos el repositorio, obtuvimos todas las dependencias necesarias por ahora. No olvide que, después de la clonación, debe ejecutar npm install o npm i dentro de la carpeta. Para iniciar la aplicación, use el comando npm run dev desde la carpeta del proyecto.
+Como clonamos el repositorio, obtuvimos todas las dependencias necesarias en nuestro boilerplate por ahora. No olvide que, después de la clonación, debe ejecutar npm install o npm i dentro de la carpeta. Para iniciar la aplicación, use el comando npm run dev desde la carpeta del proyecto.
 
 ¡No instale paquetes npm relacionados con authentication (user) todavía! La paciencia es una virtud.
 
-Definamos el modelo
+### Definamos el modelo
 
 Nuestra aplicación ya está conectada a la base de datos y podemos ver cuando ejecutamos la aplicación en nuestra terminal:
 Connected to Mongo! Database name: "project-management-server".
@@ -56,7 +56,7 @@ module.exports = Task;
 
 ¡Excelente! Las estructuras de datos están definidas, así que procedamos a definir las rutas.
 
-Define the routes
+### Define the routes
 
 Adoptando la arquitectura REST, proporcionaremos las siguientes rutas en nuestra API:
 
@@ -186,8 +186,13 @@ Ahora, vamos a app.js y, hacia el final del archivo, solicitemos el archivo proj
 // app.js
 ...
 
-// ROUTES MIDDLEWARE STARTS HERE:
-app.use('/api', require('./routes/project-routes'));
+var projectsRouter = require("./routes/project-routes"); // <<< verify that this line is in place
+...
+// var app = express();
+
+// Middleware Setup
+...
+app.use("/api", projectsRouter); // <<< verify that this line is in place
 // app.use('/api', require('./routes/task-routes'));
 ```
 
@@ -220,7 +225,7 @@ Vamos a desglosarlo:
 
 También debe probar la funcionalidad de esta ruta utilizando Postman.
 
-Complete the API
+### Complete the API
 
 Ahora que validamos nuestras dos primeras rutas, completemos la API REST:
 
@@ -283,7 +288,7 @@ router.delete('/projects/:id', (req, res, next)=>{
     })
 })
 
-module.exports = router;
+// module.exports = router;
 ```
 
 Acabamos de utilizar 3 métodos Mongoose integrados para lograr lo que necesitábamos:
@@ -307,7 +312,7 @@ const Project = require("../models/project");
 const router = express.Router();
 
 // GET route => to retrieve a specific task
-router.get("/projects/:projectId/tasks/:taskId", (req, res, next) => {
+router.get("/tasks/:taskId", (req, res, next) => {
   Task.findById(req.params.taskId)
     .then(theTask => {
       res.json(theTask);
@@ -400,6 +405,8 @@ Por defecto, los navegadores bloquearán la comunicación entre las aplicaciones
 
 Afortunadamente, hay un node module que puede ayudarnos: CORS
 
+**Verificar que ya puede estar instalado si usas el boilerplate**
+
 Instalarlo con:
 
 ```
@@ -426,4 +433,4 @@ app.use(cors({
 ...
 ```
 
-credentials entrarán en juego cuando presentemos a los usuarios y los origin points a las direcciones URL permitidas, en nuestro caso, es el servidor de React que se ejecuta en el puerto 3000. Como puede ver, el origen es el array, de modo que nos da la oportunidad de agregar tantas URL como las necesitemos.
+credentials entrará en juego cuando presentemos a los users y origin points a las direcciones URL permitidas, en nuestro caso, es el servidor de React que se ejecuta en el puerto 3000. Como puede ver, origin es el array, de modo que nos da la oportunidad de agregar tantas URL como las necesitemos.
